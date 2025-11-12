@@ -1,6 +1,6 @@
 {
-  "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install",
+  "buildCommand": "cd ../.. && pnpm --filter=@acrely/web run build",
+  "installCommand": "cd ../.. && pnpm install",
   "framework": "nextjs",
   "git": {
     "deploymentEnabled": {
