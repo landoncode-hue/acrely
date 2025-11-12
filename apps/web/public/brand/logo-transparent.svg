@@ -1,0 +1,13 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Transparent background version for in-app usage -->
+  
+  <!-- White teardrop/dome shape -->
+  <path d="M256 140C186.562 140 130 196.562 130 266C130 335.438 186.562 392 256 392C325.438 392 382 335.438 382 266C382 196.562 325.438 140 256 140Z" fill="white"/>
+  <path d="M130 266C130 196.562 186.562 140 256 140C325.438 140 382 196.562 382 266H130Z" fill="white"/>
+  
+  <!-- Outer orange circle -->
+  <circle cx="256" cy="266" r="84" fill="#D54A1D"/>
+  
+  <!-- Inner light orange/peach circle -->
+  <circle cx="256" cy="266" r="52" fill="#FF9B45"/>
+</svg>

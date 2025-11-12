@@ -1,0 +1,61 @@
+{
+  "name": "acrely",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Acrely v2 - Single Tenant Real Estate Platform for Pinnacle Builders",
+  "author": "Kennedy — Landon Digital",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:mobile": "cd apps/mobile && pnpm start",
+    "build": "turbo run build",
+    "build:mobile": "cd apps/mobile && pnpm build:all",
+    "test": "turbo run test",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:push": "cd supabase && supabase db push",
+    "db:reset": "cd supabase && supabase db reset",
+    "functions:deploy": "cd supabase && supabase functions deploy",
+    "functions:deploy:health": "cd supabase && supabase functions deploy system-health-check --no-verify-jwt",
+    "functions:deploy:backup": "cd supabase && supabase functions deploy backup-database --no-verify-jwt",
+    "functions:deploy:cleanup": "cd supabase && supabase functions deploy storage-cleanup --no-verify-jwt",
+    "functions:deploy:alerts": "cd supabase && supabase functions deploy alert-notification --no-verify-jwt",
+    "functions:deploy:maintenance": "pnpm functions:deploy:health && pnpm functions:deploy:backup && pnpm functions:deploy:cleanup && pnpm functions:deploy:alerts",
+    "deploy:maintenance": "./scripts/deploy-maintenance-system.sh",
+    "verify:runtime": "tsx scripts/verify-runtime.ts",
+    "verify:env": "tsx scripts/verify-env.ts",
+    "test:termii": "tsx scripts/test-termii.ts",
+    "setup:check": "tsx scripts/verify-runtime.ts",
+    "verify:maintenance": "./scripts/verify-maintenance-system.sh",
+    "production:setup": "./scripts/setup-production-env.sh",
+    "production:deploy": "./scripts/deploy-production.sh",
+    "production:verify": "./scripts/verify-production.sh",
+    "production:deploy-hostinger": "./scripts/deploy-to-hostinger.sh",
+    "production:full-deploy": "pnpm production:setup && pnpm production:deploy && pnpm production:verify",
+    "verify:training": "./scripts/verify-training-system.sh",
+    "icons:generate": "node scripts/generate-icons.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^22.10.5",
+    "@types/sharp": "^0.32.0",
+    "dotenv": "^17.2.3",
+    "prettier": "^3.3.3",
+    "sharp": "^0.34.5",
+    "tsx": "^4.20.6",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}
