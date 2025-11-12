@@ -17,6 +17,8 @@ module.exports = {
         "2xl": "1rem",
       },
       colors: {
+        background: "hsl(0 0% 100%)",
+        foreground: "hsl(224 71.4% 4.1%)",
         primary: {
           50: "#fef2ee",
           100: "#fde5dc",
