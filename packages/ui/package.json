@@ -9,7 +9,7 @@
       "import": "./src/index.tsx",
       "require": "./src/index.tsx"
     },
-    "./styles": "./dist/index.css"
+    "./styles": "./src/styles/globals.css"
   },
   "main": "./src/index.tsx",
   "types": "./src/index.tsx",
