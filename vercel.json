@@ -1,9 +1,9 @@
 {
-  "buildCommand": "pnpm --filter=@acrely/web run build",
-  "devCommand": "pnpm --filter=@acrely/web run dev",
+  "buildCommand": "cd apps/web && pnpm run build",
+  "devCommand": "cd apps/web && pnpm run dev",
   "installCommand": "pnpm install",
   "framework": "nextjs",
-  "outputDirectory": "apps/web/.next",
+  "rootDirectory": "apps/web",
   "git": {
     "deploymentEnabled": {
       "main": true
