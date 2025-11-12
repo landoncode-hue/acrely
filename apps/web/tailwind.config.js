@@ -1,4 +1,4 @@
-const baseConfig = require("@acrely/config/tailwind.config");
+const baseConfig = require("../../packages/config/tailwind.config");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

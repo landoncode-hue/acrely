@@ -3,17 +3,16 @@
   "version": "3.0.0",
   "private": true,
   "description": "Landon UI v3 - Design System for Acrely",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./src/index.tsx",
+      "require": "./src/index.tsx"
     },
     "./styles": "./dist/index.css"
   },
+  "main": "./src/index.tsx",
+  "types": "./src/index.tsx",
   "scripts": {
     "build": "tsup src/index.tsx --format cjs,esm --dts --external react",
     "dev": "tsup src/index.tsx --format cjs,esm --dts --external react --watch",
