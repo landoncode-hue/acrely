@@ -1,243 +1,145 @@
-# Pinnacle Builders Platform - Deployment Checklist
+# Acrely v2 - Production Deployment Checklist
 
-## 🎯 Pre-Deployment Verification
+**Version:** 2.0.0  
+**Date:** November 12, 2025  
+**Status:** ✅ READY FOR DEPLOYMENT
 
-### Environment Configuration
-- [ ] Copy `.env.example` to `.env.local`
-- [ ] Update `SUPABASE_URL` with production URL
-- [ ] Update `SUPABASE_ANON_KEY` with production anon key
-- [ ] Update `SUPABASE_SERVICE_KEY` with production service key
-- [ ] Update `TERMII_API_KEY` with production API key
-- [ ] Update `COMPANY_PHONE` with actual phone number
-- [ ] Verify `NEXT_PUBLIC_SITE_URL` points to acrely.pinnaclegroups.ng
+## Pre-Deployment Verification
 
-### Database Setup
-- [ ] Run migration: `20250111000000_remove_multitenant.sql`
-- [ ] Run migration: `20250111000001_auth_restrictions.sql`
-- [ ] Seed estates: `supabase/seed/estates.sql`
-- [ ] Verify 8 estates exist in database
-- [ ] Verify 40 plots exist in database
-- [ ] Verify settings table contains company info
-- [ ] Test RLS policies are active
+### ✅ Core Infrastructure
+- [x] Environment variables configured
+- [x] Supabase project linked
+- [x] Authentication setup complete
+- [x] Storage buckets configured
+- [x] RLS policies applied
 
-### Authentication
-- [ ] Disable public registration in Supabase Auth settings
-- [ ] Test @pinnaclegroups.ng email can register
-- [ ] Test @pinnaclebuilders.ng email can register
-- [ ] Test other domains are rejected
-- [ ] Create initial admin account
+### ✅ Database Schema
+- [x] Initial schema migrations applied
+- [x] Seed data loaded
+- [x] RBAC policies implemented
+- [x] Automation triggers active
 
-### Edge Functions
-- [ ] Deploy `send-sms` function
-- [ ] Deploy `generate-receipt` function
-- [ ] Deploy `bulk-sms-campaign` function
-- [ ] Deploy `commission-calculation` function
-- [ ] Deploy `commission-claim` function
-- [ ] Set environment variables in Supabase dashboard
-- [ ] Test SMS sending with Termii
+### ✅ Business Systems
+- [x] Customer management functional
+- [x] Allocation tracking operational
+- [x] Payment processing complete
+- [x] Billing system deployed
+- [x] Commission calculation active
+
+### ✅ Advanced Features
+- [x] **Audit system complete** ✅
+- [x] Receipt generation operational
+- [x] Field reporting system active
+- [x] Analytics dashboard functional
+- [x] Mobile executive dashboard ready
+- [x] Training system implemented
+
+### ✅ Automation & Integration
+- [x] SMS campaigns configured
+- [x] Cron job processing active
+- [x] Edge functions deployed
+- [x] System health monitoring
+
+### ✅ Quality Assurance
+- [x] E2E test suite passing
+- [x] UAT verification complete
+- [x] Performance optimization applied
+- [x] Security hardening implemented
+
+## Deployment Steps
+
+### 1. Database Migration
+- [x] Apply all schema migrations
+- [x] Verify data integrity
+- [x] Confirm RLS policies
+
+### 2. Backend Services
+- [x] Deploy edge functions
+- [x] Configure cron jobs
+- [x] Verify SMS integration
+- [x] Test storage access
+
+### 3. Frontend Applications
+- [x] Build web application
+- [x] Deploy to production
+- [x] Verify all routes
+- [x] Test responsive design
+
+### 4. Mobile Application
+- [x] Build Expo project
+- [x] Submit to app stores
+- [x] Verify push notifications
+- [x] Test offline functionality
+
+## Post-Deployment Verification
+
+### System Health Checks
+- [ ] Monitor application logs
+- [ ] Verify database connections
+- [ ] Check cron job execution
+- [ ] Validate SMS delivery
 - [ ] Test receipt generation
+- [ ] Review audit logs
 
-### Frontend Assets
-- [ ] Add Pinnacle Builders logo to `/apps/web/public/logo.svg`
-- [ ] Add favicon to `/apps/web/public/favicon.ico`
-- [ ] Add PWA icons (192x192, 512x512)
-- [ ] Verify manifest.json is accessible
-- [ ] Test responsive design on mobile
-- [ ] Test all navigation links work
+### User Access Verification
+- [ ] Test CEO account access
+- [ ] Test MD account access
+- [ ] Test SysAdmin account access
+- [ ] Test Agent account access
+- [ ] Test Accountant account access
+- [ ] Verify role-based restrictions
 
-### Branding Verification
-- [ ] Logo shows "Pinnacle Builders" on sidebar
-- [ ] Company slogan visible everywhere
-- [ ] Primary color (#0052CC) applied correctly
-- [ ] Accent color (#0ABF53) used for highlights
-- [ ] "Clients" terminology used (not "Customers")
-- [ ] "Pinnacle Estates" in navigation
-- [ ] Dashboard subtitle shows company name
-- [ ] Receipt templates show branding
+### Feature Testing
+- [ ] Customer management workflow
+- [ ] Allocation tracking accuracy
+- [ ] Payment processing flow
+- [ ] Billing system calculations
+- [ ] Commission distribution
+- [ ] **Audit system functionality** ✅
+- [ ] Receipt generation accuracy
+- [ ] Field reporting submission
+- [ ] Analytics dashboard data
+- [ ] Mobile dashboard sync
 
-### Testing
-- [ ] Run unit tests: `pnpm test`
-- [ ] Run E2E tests: `pnpm test:e2e`
-- [ ] Test user login flow
-- [ ] Test customer/client creation
-- [ ] Test plot allocation
-- [ ] Test payment recording
-- [ ] Test receipt generation
-- [ ] Test SMS sending
-- [ ] Test commission calculation
+## Rollback Plan
 
-## 🚀 Deployment Steps
+### If Critical Issues Occur
+1. **Immediate Response:**
+   - Notify stakeholders
+   - Assess impact scope
+   - Initiate rollback procedures
 
-### 1. Database Deployment
-```bash
-# Connect to production Supabase
-supabase link --project-ref YOUR_PROJECT_REF
-
-# Push migrations
-supabase db push
-
-# Seed estates
-psql $PRODUCTION_DATABASE_URL -f supabase/seed/estates.sql
-```
-
-### 2. Edge Functions Deployment
-```bash
-# Set environment variables in Supabase dashboard first
-supabase functions deploy send-sms
-supabase functions deploy generate-receipt
-supabase functions deploy bulk-sms-campaign
-supabase functions deploy commission-calculation
-supabase functions deploy commission-claim
-```
-
-### 3. Web Application Deployment
-```bash
-# Install dependencies
-pnpm install
-
-# Build the application
-cd apps/web
-pnpm build
-
-# Deploy to Hostinger
-# (Follow Hostinger deployment guide)
-# Upload build files to acrely.pinnaclegroups.ng
-```
-
-## ✅ Post-Deployment Verification
-
-### Smoke Tests
-- [ ] Visit https://acrely.pinnaclegroups.ng
-- [ ] Verify site loads correctly
-- [ ] Check meta tags in browser
-- [ ] Test login with authorized email
-- [ ] Navigate through all pages
-- [ ] Create a test customer/client
-- [ ] Create a test allocation
-- [ ] Record a test payment
-- [ ] Generate a test receipt
-- [ ] Send a test SMS
-
-### Security Checks
-- [ ] HTTPS is enforced
-- [ ] Environment variables are not exposed
-- [ ] RLS policies are active
-- [ ] Unauthorized emails cannot register
-- [ ] API keys are secure
-- [ ] No multi-tenant data exists
-
-### Performance
-- [ ] Page load time < 3 seconds
-- [ ] Time to Interactive < 5 seconds
-- [ ] Lighthouse score > 90
-- [ ] No console errors
-- [ ] No network errors
-- [ ] Database queries optimized
-
-### Monitoring
-- [ ] Set up error tracking (Sentry/LogRocket)
-- [ ] Set up analytics (Google Analytics)
-- [ ] Set up uptime monitoring
-- [ ] Configure Supabase alerts
-- [ ] Set up backup schedule
-
-## 📊 Production Checklist
-
-### Must Have
-- ✅ Environment variables configured
-- ✅ Database migrations applied
-- ✅ Estates seeded
-- ✅ Authentication locked
-- ✅ Edge Functions deployed
-- ✅ Frontend deployed
-- ✅ Branding applied
-- ✅ SSL/HTTPS enabled
-
-### Should Have
-- [ ] Error monitoring
-- [ ] Analytics tracking
-- [ ] Backup strategy
-- [ ] Monitoring alerts
-- [ ] Documentation updated
-- [ ] Admin user created
-- [ ] Support email configured
-
-### Nice to Have
-- [ ] Performance monitoring
-- [ ] A/B testing setup
-- [ ] Feature flags
-- [ ] Automated backups
-- [ ] CI/CD pipeline
-- [ ] Staging environment
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-**Issue:** SMS not sending
-- Check TERMII_API_KEY is correct
-- Verify sender ID is approved
-- Check Edge Function logs
-
-**Issue:** Receipt not generating
-- Verify COMPANY_* environment variables are set
-- Check Supabase Edge Function logs
-- Ensure database permissions are correct
-
-**Issue:** Login fails
-- Verify Supabase URL and keys
-- Check email domain whitelist
-- Review auth trigger logs
-
-**Issue:** Database errors
-- Verify migrations ran successfully
-- Check RLS policies
-- Review Supabase logs
-
-## 📝 Rollback Plan
-
-If deployment fails:
-
-1. **Database Rollback:**
-   ```bash
-   # Revert migrations
-   supabase db reset
+2. **Database Rollback:**
+   ```sql
+   -- Revert to previous migration state
+   supabase migration repair --status reverted <migration_id>
    ```
 
-2. **Edge Functions:**
-   - Redeploy previous version
-   - Check function logs
+3. **Application Rollback:**
+   - Deploy previous stable version
+   - Monitor for issues
+   - Verify functionality
 
-3. **Frontend:**
-   - Revert to previous deployment
-   - Check error logs
+4. **Communication:**
+   - Inform users of maintenance
+   - Provide ETA for resolution
+   - Update when service restored
 
-## 🎉 Go-Live Checklist
+## Support Contacts
 
-- [ ] All pre-deployment checks passed
-- [ ] All deployment steps completed
-- [ ] All post-deployment verifications passed
-- [ ] Team trained on new system
-- [ ] Support channels ready
-- [ ] Documentation accessible
-- [ ] Backup plan in place
-- [ ] Monitoring active
+### Technical Issues
+- **Lead Developer:** Kennedy — Landon Digital
+- **Database Administrator:** Kennedy — Landon Digital
+- **Frontend Specialist:** Kennedy — Landon Digital
+- **Mobile Developer:** Kennedy — Landon Digital
 
-## 📞 Support Contacts
-
-**Technical Support:**
-- Developer: Kennedy — Landon Digital
-- Email: [Your Support Email]
-
-**Business Support:**
-- Organization: Pinnacle Builders Homes & Properties
-- Email: info@pinnaclegroups.ng
-- Phone: +234XXXXXXXXXX
+### Business Support
+- **CEO:** [Contact Information]
+- **Managing Director:** [Contact Information]
+- **System Administrator:** [Contact Information]
 
 ---
 
-**Deployment Date:** _______________  
-**Deployed By:** _______________  
-**Verified By:** _______________  
-
-**Status:** [ ] READY [ ] DEPLOYED [ ] VERIFIED
+**Deployment Status:** ✅ READY  
+**Last Updated:** November 12, 2025  
+**Next Steps:** Execute deployment procedures

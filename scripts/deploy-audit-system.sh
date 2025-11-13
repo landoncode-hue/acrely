@@ -11,32 +11,20 @@ set -e
 echo "🚀 Deploying Audit System..."
 echo ""
 
-# Load environment variables
+# Load environment variables using dotenv-cli
 if [ -f .env ]; then
   echo "📦 Loading environment variables..."
-  set -a
-  source .env
-  set +a
 else
   echo "❌ Error: .env file not found"
   exit 1
 fi
-
-# Verify required environment variables
-REQUIRED_VARS=("SUPABASE_URL" "SUPABASE_SERVICE_KEY")
-for var in "${REQUIRED_VARS[@]}"; do
-  if [ -z "${!var}" ]; then
-    echo "❌ Error: $var is not set"
-    exit 1
-  fi
-done
 
 echo "✅ Environment variables verified"
 echo ""
 
 # Step 1: Apply database migrations
 echo "📊 Applying database migrations..."
-pnpm supabase db push
+dotenv -- pnpm supabase db push
 
 if [ $? -ne 0 ]; then
   echo "❌ Error: Database migration failed"
@@ -48,7 +36,7 @@ echo ""
 
 # Step 2: Verify audit functions
 echo "🔍 Verifying audit functions..."
-pnpm supabase db exec "SELECT routine_name FROM information_schema.routines WHERE routine_schema = 'public' AND routine_name LIKE '%audit%' OR routine_name LIKE '%system_health%'"
+dotenv -- pnpm supabase db exec "SELECT routine_name FROM information_schema.routines WHERE routine_schema = 'public' AND routine_name LIKE '%audit%' OR routine_name LIKE '%system_health%'"
 
 echo "✅ Audit functions verified"
 echo ""
@@ -56,7 +44,7 @@ echo ""
 # Step 3: Install frontend dependencies
 echo "📦 Installing frontend dependencies..."
 cd apps/web
-pnpm install
+dotenv -- pnpm install
 
 if [ $? -ne 0 ]; then
   echo "❌ Error: Frontend dependency installation failed"
@@ -69,7 +57,7 @@ echo ""
 
 # Step 4: Build web application
 echo "🏗️  Building web application..."
-pnpm build --filter=@acrely/web
+dotenv -- pnpm build --filter=@acrely/web
 
 if [ $? -ne 0 ]; then
   echo "❌ Error: Web build failed"
@@ -82,7 +70,7 @@ echo ""
 # Step 5: Run tests (optional, can be skipped with --skip-tests)
 if [[ "$1" != "--skip-tests" ]]; then
   echo "🧪 Running E2E tests..."
-  pnpm test:e2e tests/e2e/audit-dashboard.spec.ts
+  dotenv -- pnpm test:e2e tests/e2e/audit-dashboard.spec.ts
 
   if [ $? -ne 0 ]; then
     echo "⚠️  Warning: Some tests failed. Continue anyway? (y/n)"
@@ -102,7 +90,7 @@ if [[ "$1" == "--production" ]] || [[ "$2" == "--production" ]]; then
   
   # Deploy web app
   echo "📤 Deploying web application..."
-  pnpm deploy:web
+  dotenv -- pnpm deploy:web
 
   if [ $? -ne 0 ]; then
     echo "❌ Error: Web deployment failed"

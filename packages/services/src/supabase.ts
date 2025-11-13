@@ -3,7 +3,7 @@ import type { Database } from "./types/database";
 
 const getSupabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const getSupabaseAnonKey = () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
-const getSupabaseServiceKey = () => process.env.SUPABASE_SERVICE_KEY || "";
+const getSupabaseServiceKey = () => process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || "";
 
 // Lazy initialization to avoid build-time errors
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
@@ -38,7 +38,7 @@ export const supabaseAdmin = new Proxy({} as ReturnType<typeof createClient<Data
       const key = getSupabaseServiceKey();
       
       if (!url || !key) {
-        throw new Error("Supabase admin credentials not found. Please check NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_KEY environment variables.");
+        throw new Error("Supabase admin credentials not found. Please check NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY environment variables.");
       }
       
       _supabaseAdmin = createClient<Database>(url, key, {
