@@ -1,8 +1,9 @@
 {
-  "buildCommand": "cd apps/web && pnpm run build",
-  "devCommand": "cd apps/web && pnpm run dev",
-  "installCommand": "pnpm install",
+  "buildCommand": "pnpm --filter=@acrely/web run build",
+  "devCommand": "pnpm --filter=@acrely/web run dev",
+  "installCommand": "pnpm install --frozen-lockfile",
   "outputDirectory": "apps/web/.next",
+  "framework": "nextjs",
   "git": {
     "deploymentEnabled": {
       "main": true

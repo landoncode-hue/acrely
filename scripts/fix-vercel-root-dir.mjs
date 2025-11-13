@@ -34,10 +34,10 @@ async function updateProjectSettings(token) {
   const projectSettings = {
     rootDirectory: null, // Set to null to deploy from root
     framework: null,
-    buildCommand: 'cd apps/web && pnpm run build',
+    buildCommand: 'pnpm --filter=@acrely/web run build',
     installCommand: 'pnpm install --frozen-lockfile',
     outputDirectory: 'apps/web/.next',
-    devCommand: 'cd apps/web && pnpm run dev'
+    devCommand: 'pnpm --filter=@acrely/web run dev'
   };
 
   return new Promise((resolve, reject) => {
