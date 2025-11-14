@@ -3,9 +3,15 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    @apply border-slate-200;
+  }
+  
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
