@@ -73,9 +73,9 @@ export default function DashboardPage() {
           .lt("next_payment_date", new Date().toISOString()),
       ]);
 
-      const totalRevenue = revenueData?.reduce((sum, item) => sum + (item.amount_paid || 0), 0) || 0;
-      const revenueThisMonth = revenueThisMonthData?.reduce((sum, item) => sum + (item.amount_paid || 0), 0) || 0;
-      const pendingCommissions = pendingCommissionsData?.reduce((sum, item) => sum + (item.commission_amount || 0), 0) || 0;
+      const totalRevenue = (revenueData as any)?.reduce((sum: number, item: any) => sum + (item.amount_paid || 0), 0) || 0;
+      const revenueThisMonth = (revenueThisMonthData as any)?.reduce((sum: number, item: any) => sum + (item.amount_paid || 0), 0) || 0;
+      const pendingCommissions = (pendingCommissionsData as any)?.reduce((sum: number, item: any) => sum + (item.commission_amount || 0), 0) || 0;
 
       setStats({
         total_customers: totalCustomers || 0,

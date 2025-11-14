@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
         )
       `)
       .order("created_at", { ascending: false })
-      .range(query.offset, query.offset + query.limit - 1);
+      .range(query.offset || 0, (query.offset || 0) + (query.limit || 50) - 1);
 
     // Apply filters
     if (query.user_id) {
@@ -80,12 +80,12 @@ export async function GET(request: NextRequest) {
       .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
     // Calculate summary stats
-    const actionCounts = summary?.reduce((acc: Record<string, number>, log) => {
+    const actionCounts = (summary as any)?.reduce((acc: Record<string, number>, log: any) => {
       acc[log.action] = (acc[log.action] || 0) + 1;
       return acc;
     }, {});
 
-    const tableCounts = summary?.reduce((acc: Record<string, number>, log) => {
+    const tableCounts = (summary as any)?.reduce((acc: Record<string, number>, log: any) => {
       acc[log.table_name] = (acc[log.table_name] || 0) + 1;
       return acc;
     }, {});
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
         record_id: record_id || null,
         old_data: old_data || null,
         new_data: new_data || null,
-      })
+      } as any)
       .select()
       .single();
 

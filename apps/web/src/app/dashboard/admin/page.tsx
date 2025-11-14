@@ -64,7 +64,7 @@ export default function AdminDashboardPage() {
 
       // Transform the array into an object
       const statsObj: any = {};
-      data?.forEach((item: any) => {
+      (data as any)?.forEach((item: any) => {
         const key = item.metric.replace(/\s+/g, "");
         statsObj[key.charAt(0).toLowerCase() + key.slice(1)] = item.value;
       });
@@ -89,18 +89,19 @@ export default function AdminDashboardPage() {
   const fetchActivityStats = async () => {
     try {
       const { data, error } = await supabase
-        .rpc("get_audit_activity_stats", { days_back: 1 });
+        .rpc("get_audit_activity_stats", { days_back: 1 } as any);
 
       if (error) throw error;
 
-      if (data && data.length > 0) {
+      if (data && (data as any).length > 0) {
+        const firstItem = (data as any)[0];
         setActivityStats({
-          totalActions: Number(data[0].total_actions) || 0,
-          totalCreates: Number(data[0].total_creates) || 0,
-          totalUpdates: Number(data[0].total_updates) || 0,
-          totalDeletes: Number(data[0].total_deletes) || 0,
-          uniqueUsers: Number(data[0].unique_users) || 0,
-          mostActiveEntity: data[0].most_active_entity || "—",
+          totalActions: Number(firstItem.total_actions) || 0,
+          totalCreates: Number(firstItem.total_creates) || 0,
+          totalUpdates: Number(firstItem.total_updates) || 0,
+          totalDeletes: Number(firstItem.total_deletes) || 0,
+          uniqueUsers: Number(firstItem.unique_users) || 0,
+          mostActiveEntity: firstItem.most_active_entity || "—",
         });
       }
     } catch (error: any) {
