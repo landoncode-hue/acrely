@@ -1,6 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [],
+  safelist: [
+    // Dynamic color classes used in dashboard cards
+    'bg-primary-100', 'bg-primary-600', 'text-primary-600',
+    'bg-accent-100', 'bg-accent-600', 'text-accent-600',
+    'bg-amber-100', 'bg-amber-600', 'text-amber-600',
+    'bg-blue-100', 'bg-blue-600', 'text-blue-600',
+    'bg-green-100', 'bg-green-600', 'text-green-600',
+    'bg-purple-100', 'bg-purple-600', 'text-purple-600',
+    'bg-red-100', 'bg-red-600', 'text-red-600',
+  ],
   theme: {
     extend: {
       fontFamily: {

@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@acrely/ui", "@acrely/services", "@acrely/utils"],
   typescript: {
-    ignoreBuildErrors: true, // Temporarily disabled for Vercel deployment - Supabase types need regeneration
+    ignoreBuildErrors: false,
   },
   // Optimize for Vercel deployment
   output: 'standalone',

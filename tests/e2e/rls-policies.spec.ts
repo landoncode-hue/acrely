@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { test, expect } from '@playwright/test';
 import { createClient } from '@supabase/supabase-js';
 
@@ -62,11 +63,11 @@ test.describe('RLS Policies - Database Security', () => {
         role: 'Agent'
       };
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase
         .from('users')
-        .insert(testUser)
+        .insert(testUser as any)
         .select()
-        .single();
+        .single() as any);
 
       expect(error).toBeNull();
       expect(data).toBeDefined();

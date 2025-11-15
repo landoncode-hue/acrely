@@ -34,13 +34,15 @@ export default function CommissionsPage() {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setCommissions(data || []);
+      
+      const commissionData = (data || []) as Commission[];
+      setCommissions(commissionData);
 
       // Calculate stats
-      const pending = data?.filter((c) => c.status === "pending").reduce((sum, c) => sum + c.commission_amount, 0) || 0;
-      const approved = data?.filter((c) => c.status === "approved").reduce((sum, c) => sum + c.commission_amount, 0) || 0;
-      const paid = data?.filter((c) => c.status === "paid").reduce((sum, c) => sum + c.commission_amount, 0) || 0;
-      const total = data?.reduce((sum, c) => sum + c.commission_amount, 0) || 0;
+      const pending = commissionData.filter((c) => c.status === "pending").reduce((sum, c) => sum + c.commission_amount, 0) || 0;
+      const approved = commissionData.filter((c) => c.status === "approved").reduce((sum, c) => sum + c.commission_amount, 0) || 0;
+      const paid = commissionData.filter((c) => c.status === "paid").reduce((sum, c) => sum + c.commission_amount, 0) || 0;
+      const total = commissionData.reduce((sum, c) => sum + c.commission_amount, 0) || 0;
 
       setStats({ pending, approved, paid, total });
     } catch (error) {
