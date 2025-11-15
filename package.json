@@ -15,6 +15,8 @@
     "build:mobile": "cd apps/mobile && pnpm build:all",
     "test": "turbo run test",
     "test:e2e": "playwright test",
+    "test:e2e:full": "./scripts/run-e2e.sh",
+    "test:e2e:reset-db": "supabase db execute --file scripts/reset-test-db.sql",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
     "test:e2e:master": "tsx scripts/run-e2e-master.ts",
@@ -50,8 +52,15 @@
     "production:verify": "./scripts/verify-production.sh",
     "production:deploy-hostinger": "./scripts/deploy-to-hostinger.sh",
     "production:full-deploy": "pnpm production:setup && pnpm production:deploy && pnpm production:verify",
+    "production:deploy-web": "./scripts/deploy-production-web.sh",
+    "production:deploy-mobile": "./scripts/deploy-production-mobile.sh",
+    "production:verify-deployment": "./scripts/verify-production-deployment.sh",
+    "staging:deploy-web": "./scripts/deploy-production-web.sh staging",
+    "functions:deploy:queue-monitor": "cd supabase && supabase functions deploy queue-health-monitor --no-verify-jwt",
     "verify:training": "./scripts/verify-training-system.sh",
-    "icons:generate": "node scripts/generate-icons.js"
+    "icons:generate": "node scripts/generate-icons.js",
+    "import:legacy": "tsx scripts/import-legacy-data.ts",
+    "import:auto": "tsx scripts/setup-and-import.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0",

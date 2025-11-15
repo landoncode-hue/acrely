@@ -31,6 +31,21 @@ yarn-error.log*
 .env
 .env*.local
 .env.production
+.env.development
+.env.test
+.env.staging
+
+# Backup files
+backups/
+*.backup
+*.sql.gz
+*.meta
+
+# Sensitive data
+**/secrets/
+**/*.secret
+**/*.key
+**/*.pem
 
 # Vercel
 .vercel

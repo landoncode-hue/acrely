@@ -1,10 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
+ * Load environment variables from .env.test.local if TEST_MODE is enabled
  */
-// require('dotenv').config();
+if (process.env.TEST_MODE === 'true') {
+  dotenv.config({ path: path.resolve(__dirname, '.env.test.local') });
+  console.log('🧪 Test mode enabled - using test schema');
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -33,6 +37,10 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    /* Add test mode header for debugging */
+    extraHTTPHeaders: process.env.TEST_MODE === 'true' ? {
+      'x-test-mode': 'true',
+    } : {},
   },
 
   /* Configure projects for major browsers */
@@ -65,9 +73,15 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm dev --filter=@acrely/web',
+    command: process.env.TEST_MODE === 'true' 
+      ? 'TEST_MODE=true pnpm dev --filter=@acrely/web'
+      : 'pnpm dev --filter=@acrely/web',
     url: 'http://localhost:3001',
     reuseExistingServer: true,
     timeout: 120 * 1000,
+    env: process.env.TEST_MODE === 'true' ? {
+      TEST_MODE: 'true',
+      NEXT_PUBLIC_TEST_SCHEMA: 'test',
+    } : {},
   },
 });

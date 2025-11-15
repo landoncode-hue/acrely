@@ -32,7 +32,7 @@ These allow Edge Functions to access the Supabase database with elevated permiss
 - **Used by**: All functions that query the database
 
 #### SUPABASE_SERVICE_ROLE_KEY
-- **Value**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFlbnFpbG91cnh0ZnhjaGthd2VrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjIzNDg1NSwiZXhwIjoyMDc3ODEwODU1fQ.ey_97IO41llNoRNdETLrxSIzIiPa9JyCAoS_UMES7ss`
+- **Value**: `<your_supabase_service_role_key>` (Get from Supabase Dashboard → Settings → API)
 - **Purpose**: Service role authentication (bypasses RLS policies)
 - **Used by**: All functions that need write access or admin operations
 
@@ -41,7 +41,7 @@ These allow Edge Functions to access the Supabase database with elevated permiss
 These enable Edge Functions to send SMS notifications:
 
 #### TERMII_API_KEY
-- **Value**: `TLlpIiGIKwzhwErZGPBjxciDtTHuTqSvzSgayCFpCmuJjJOEMLzftmDugTIVBW`
+- **Value**: `<your_termii_api_key>` (Get from Termii Dashboard → API Keys)
 - **Purpose**: Termii API authentication
 - **Used by**: `send-sms`, `bulk-sms-campaign`, `check-overdue-payments`
 
@@ -111,10 +111,10 @@ supabase link --project-ref qenqilourxtfxchkawek
 ```bash
 # Supabase credentials
 supabase secrets set SUPABASE_URL=https://qenqilourxtfxchkawek.supabase.co
-supabase secrets set SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFlbnFpbG91cnh0ZnhjaGthd2VrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjIzNDg1NSwiZXhwIjoyMDc3ODEwODU1fQ.ey_97IO41llNoRNdETLrxSIzIiPa9JyCAoS_UMES7ss
+supabase secrets set SUPABASE_SERVICE_ROLE_KEY=<your_supabase_service_role_key>
 
 # Termii credentials
-supabase secrets set TERMII_API_KEY=TLlpIiGIKwzhwErZGPBjxciDtTHuTqSvzSgayCFpCmuJjJOEMLzftmDugTIVBW
+supabase secrets set TERMII_API_KEY=<your_termii_api_key>
 supabase secrets set TERMII_SENDER_ID=PBuilders
 supabase secrets set TERMII_BASE_URL=https://v3.api.termii.com
 
@@ -185,10 +185,10 @@ echo "🔧 Configuring Supabase Edge Functions secrets..."
 
 # Supabase credentials
 supabase secrets set SUPABASE_URL=https://qenqilourxtfxchkawek.supabase.co
-supabase secrets set SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFlbnFpbG91cnh0ZnhjaGthd2VrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MjIzNDg1NSwiZXhwIjoyMDc3ODEwODU1fQ.ey_97IO41llNoRNdETLrxSIzIiPa9JyCAoS_UMES7ss
+supabase secrets set SUPABASE_SERVICE_ROLE_KEY=<your_supabase_service_role_key>
 
 # Termii credentials
-supabase secrets set TERMII_API_KEY=TLlpIiGIKwzhwErZGPBjxciDtTHuTqSvzSgayCFpCmuJjJOEMLzftmDugTIVBW
+supabase secrets set TERMII_API_KEY=<your_termii_api_key>
 supabase secrets set TERMII_SENDER_ID=PBuilders
 supabase secrets set TERMII_BASE_URL=https://v3.api.termii.com
 
@@ -284,8 +284,8 @@ const apiKey = getEnvVar('TERMII_API_KEY');
 ```bash
 # supabase/.env.local (for local Edge Functions testing)
 SUPABASE_URL=https://qenqilourxtfxchkawek.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-TERMII_API_KEY=TLlpIiGIKwzhwErZGPBjxciDtTHuTqSvzSgayCFpCmuJjJOEMLzftmDugTIVBW
+SUPABASE_SERVICE_ROLE_KEY=<your_supabase_service_role_key>
+TERMII_API_KEY=<your_termii_api_key>
 TERMII_SENDER_ID=PBuilders
 TERMII_BASE_URL=https://v3.api.termii.com
 COMPANY_NAME=Pinnacle Builders Homes & Properties
