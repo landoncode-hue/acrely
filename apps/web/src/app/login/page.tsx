@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, CardContent, CardHeader } from "@acrely/ui";
 import { supabase } from "@acrely/services";
-import { Building2, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function LoginPage() {
       // Fetch user profile to check role
       if (data.user) {
         const { data: profileData, error: profileError } = await supabase
-          .from("profiles")
+          .from("users")
           .select("role")
           .eq("id", data.user.id)
           .single();
@@ -62,8 +63,15 @@ export default function LoginPage() {
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-100 rounded-2xl mb-4">
-            <Building2 className="w-10 h-10 text-primary-600" />
+          <div className="inline-flex items-center justify-center mb-6">
+            <Image
+              src="/brand/logo-official.png"
+              alt="Acrely Logo"
+              width={120}
+              height={120}
+              priority
+              className="rounded-2xl"
+            />
           </div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">
             Welcome Back

@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 interface NavItem {
   label: string;
@@ -127,10 +128,14 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex md:flex-col md:w-64 border-r border-gray-200 bg-white">
         <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-white" />
-            </div>
+          <div className="flex items-center gap-3">
+            <Image
+              src="/brand/logo-official.png"
+              alt="Acrely Logo"
+              width={40}
+              height={40}
+              className="rounded-2xl"
+            />
             <div>
               <h1 className="text-xl font-bold text-primary-600">Pinnacle Builders</h1>
               <p className="text-xs text-accent-600 font-medium">Building Trust, One Estate at a Time</p>
@@ -191,10 +196,14 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
           >
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">
-                    <Building2 className="w-6 h-6 text-white" />
-                  </div>
+                <div className="flex items-center gap-3">
+                  <Image
+                    src="/brand/logo-sm.png"
+                    alt="Acrely Logo"
+                    width={40}
+                    height={40}
+                    className="rounded-lg"
+                  />
                   <div>
                     <h1 className="text-lg font-bold text-primary-600">Pinnacle Builders</h1>
                   </div>

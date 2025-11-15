@@ -1,134 +1,195 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button, Card, CardContent, CardHeader } from "@acrely/ui";
-import { Building2, Users, MapPin, DollarSign } from "lucide-react";
+import { supabase } from "@acrely/services";
+import { Loader2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        setError(signInError.message);
+        setLoading(false);
+        return;
+      }
+
+      // Fetch user profile to check role
+      if (data.user) {
+        console.log('User logged in:', data.user.id);
+        
+        const { data: profileData, error: profileError } = await supabase
+          .from("users")
+          .select("role")
+          .eq("id", data.user.id)
+          .single();
+
+        if (profileError) {
+          console.error('Profile fetch error:', profileError);
+          
+          // Fallback: Try to get role from user metadata
+          const metadataRole = data.user.user_metadata?.role;
+          if (metadataRole) {
+            console.log('Using role from metadata:', metadataRole);
+            // Redirect based on metadata role
+            if (metadataRole === "CEO" || metadataRole === "MD" || metadataRole === "SysAdmin") {
+              router.push("/dashboard/analytics");
+            } else {
+              router.push("/dashboard");
+            }
+            return;
+          }
+          
+          setError(`Database error: ${profileError.message}. Please contact support.`);
+          setLoading(false);
+          return;
+        }
+
+        if (!profileData) {
+          setError("User profile not found in database. Please contact support.");
+          setLoading(false);
+          return;
+        }
+
+        // Redirect based on role
+        const role = (profileData as any).role;
+        console.log('User role:', role);
+        if (role === "CEO" || role === "MD" || role === "SysAdmin") {
+          router.push("/dashboard/analytics");
+        } else {
+          router.push("/dashboard");
+        }
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+      setLoading(false);
+    }
+  };
+
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
-        <div className="text-center mb-12 sm:mb-16 lg:mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-50 text-primary-700 rounded-full text-sm font-semibold mb-6">
-            <span className="w-2.5 h-2.5 bg-primary-500 rounded-full animate-pulse"></span>
-            Version 2.0 • Production Ready
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center mb-6">
+            <Image
+              src="/brand/logo-official.png"
+              alt="Acrely Logo"
+              width={120}
+              height={120}
+              priority
+              className="rounded-2xl"
+            />
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 tracking-tight">
-            Acrely<span className="text-primary-600">.</span>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">
+            Welcome Back
           </h1>
-          <p className="text-lg sm:text-xl text-slate-600 mb-3 max-w-2xl mx-auto font-medium">
-            Professional Real Estate Management Platform
-          </p>
-          <p className="text-base text-slate-500 max-w-xl mx-auto">
-            Powered by Pinnacle Builders Homes & Properties
+          <p className="text-slate-600">
+            Sign in to access your dashboard
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
-          <Card hover className="group">
-            <CardHeader className="text-center">
-              <div className="flex justify-center mb-3">
-                <div className="p-4 bg-primary-50 rounded-xl group-hover:bg-primary-100 transition-colors">
-                  <Building2 className="w-10 h-10 text-primary-600" />
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-slate-900 mb-1">8</h3>
-              <p className="text-sm text-slate-600 font-medium">Active Estates</p>
-            </CardHeader>
-          </Card>
-
-          <Card hover className="group">
-            <CardHeader className="text-center">
-              <div className="flex justify-center mb-3">
-                <div className="p-4 bg-emerald-50 rounded-xl group-hover:bg-emerald-100 transition-colors">
-                  <MapPin className="w-10 h-10 text-emerald-600" />
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-slate-900 mb-1">24</h3>
-              <p className="text-sm text-slate-600 font-medium">Available Plots</p>
-            </CardHeader>
-          </Card>
-
-          <Card hover className="group">
-            <CardHeader className="text-center">
-              <div className="flex justify-center mb-3">
-                <div className="p-4 bg-blue-50 rounded-xl group-hover:bg-blue-100 transition-colors">
-                  <Users className="w-10 h-10 text-blue-600" />
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-slate-900 mb-1">0</h3>
-              <p className="text-sm text-slate-600 font-medium">Customers</p>
-            </CardHeader>
-          </Card>
-
-          <Card hover className="group">
-            <CardHeader className="text-center">
-              <div className="flex justify-center mb-3">
-                <div className="p-4 bg-amber-50 rounded-xl group-hover:bg-amber-100 transition-colors">
-                  <DollarSign className="w-10 h-10 text-amber-600" />
-                </div>
-              </div>
-              <h3 className="text-3xl font-bold text-slate-900 mb-1">₦0</h3>
-              <p className="text-sm text-slate-600 font-medium">Total Revenue</p>
-            </CardHeader>
-          </Card>
-        </div>
-
-        <Card className="max-w-3xl mx-auto border-slate-200/60 shadow-xl shadow-slate-200/50">
+        <Card className="border-slate-200/80 shadow-xl shadow-slate-200/50">
           <CardHeader className="border-b border-slate-100">
-            <h2 className="text-2xl font-bold text-slate-900">Getting Started</h2>
-            <p className="text-sm text-slate-600 mt-1">Follow these steps to set up your platform</p>
+            <h2 className="text-xl font-semibold text-slate-900">Sign In</h2>
+            <p className="text-sm text-slate-600 mt-1">
+              Enter your credentials to continue
+            </p>
           </CardHeader>
           <CardContent>
-            <div className="space-y-6">
-              <div className="flex items-start gap-4 group">
-                <div className="bg-gradient-to-br from-primary-500 to-primary-600 text-white rounded-lg w-12 h-12 flex items-center justify-center font-bold flex-shrink-0 shadow-sm text-lg">
-                  1
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-slate-900 mb-1">Set up your first admin account</h3>
-                  <p className="text-sm text-slate-600">Create an admin user to manage the platform</p>
-                </div>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-slate-700 mb-2"
+                >
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="you@example.com"
+                />
               </div>
 
-              <div className="flex items-start gap-4 group">
-                <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg w-12 h-12 flex items-center justify-center font-bold flex-shrink-0 shadow-sm text-lg">
-                  2
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-slate-900 mb-1">Add your agents</h3>
-                  <p className="text-sm text-slate-600">Invite your sales agents to the platform</p>
-                </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-slate-700 mb-2"
+                >
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="Enter your password"
+                />
               </div>
 
-              <div className="flex items-start gap-4 group">
-                <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-lg w-12 h-12 flex items-center justify-center font-bold flex-shrink-0 shadow-sm text-lg">
-                  3
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  {error}
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-slate-900 mb-1">Start managing properties</h3>
-                  <p className="text-sm text-slate-600">Begin tracking customers, allocations, and payments</p>
-                </div>
-              </div>
+              )}
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full"
+                size="lg"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-slate-600">
+                Don't have an account?{" "}
+                <Link href="/signup" className="text-primary-600 hover:text-primary-700 font-semibold">
+                  Sign up
+                </Link>
+              </p>
             </div>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <Link href="/login" className="flex-1 sm:flex-none">
-                <Button size="lg" className="w-full sm:w-auto">Sign In</Button>
-              </Link>
-              <Link href="/dashboard" className="flex-1 sm:flex-none">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                  View Dashboard
-                </Button>
-              </Link>
+            <div className="mt-4 text-center text-sm text-slate-600">
+              <p>Acrely v2.0 • Pinnacle Builders Homes & Properties</p>
             </div>
           </CardContent>
         </Card>
-
-        <div className="mt-16 sm:mt-20 text-center text-slate-500 text-sm">
-          <p className="font-medium">© 2025 Pinnacle Builders Homes & Properties. All rights reserved.</p>
-          <p className="mt-2 text-slate-400">
-            Built with ❤️ by <span className="text-primary-600 font-semibold">Landon Digital</span> • Acrely v2.0.0
-          </p>
-        </div>
       </div>
     </main>
   );

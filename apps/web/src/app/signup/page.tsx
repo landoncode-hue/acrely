@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, CardContent, CardHeader, Input, Select, Checkbox, Alert } from "@acrely/ui";
 import { supabase } from "@acrely/services";
-import { Building2, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const ROLE_OPTIONS = [
   { value: "CEO", label: "CEO (Chief Executive Officer)" },
@@ -81,7 +82,7 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      // Create auth user (without email verification)
+      // Create auth user (the database trigger will automatically create the profile)
       const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -107,25 +108,8 @@ export default function SignupPage() {
         return;
       }
 
-      // Create profile record
-      // @ts-ignore - Supabase type generation issue
-      const { error: profileError } = await supabase.from("profiles").insert([
-        {
-          id: authData.user.id,
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          role: formData.role,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        },
-      ]);
-
-      if (profileError) {
-        setError("Account created but failed to set up profile. Please contact support.");
-        setLoading(false);
-        return;
-      }
+      // Wait a moment for the database trigger to create the profile
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Auto-login and redirect based on role
       const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -157,8 +141,15 @@ export default function SignupPage() {
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-100 rounded-2xl mb-4">
-            <Building2 className="w-10 h-10 text-primary-600" />
+          <div className="inline-flex items-center justify-center mb-6">
+            <Image
+              src="/brand/logo-official.png"
+              alt="Acrely Logo"
+              width={120}
+              height={120}
+              priority
+              className="rounded-2xl"
+            />
           </div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h1>
           <p className="text-slate-600">Join Acrely to manage your real estate</p>
